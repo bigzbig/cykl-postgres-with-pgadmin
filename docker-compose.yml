@@ -1,0 +1,40 @@
+version: '3.8'
+
+
+services: 
+  
+  postgres:
+    build:
+      dockerfile: ./docker/postgres/Dockerfile
+      context: .
+    command: postgres -c log_statement=all  
+    volumes:  
+      - postgres-volume:/var/lib/postgresql/data
+      - ./backups:/backups
+    ports:  
+      - "5433:5432"  
+    env_file: ./.env
+  
+  pgadmin:  
+    build:  
+      dockerfile: ./docker/pgadmin/Dockerfile  
+      context: .  
+    image: sls.pgadmin4:latest  
+    ports:  
+      - 8081:80  
+    depends_on:  
+      - postgres
+    volumes:  
+      - pgadmin-volume:/var/lib/pgadmin  
+    environment:  
+      - PGADMIN_DEFAULT_EMAIL=postgres@example.com
+      - PGADMIN_DEFAULT_PASSWORD=postgres
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    env_file: ./.env  
+
+  
+volumes:  
+  postgres-volume:  
+  pgadmin-volume:  
+  

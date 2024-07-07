@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+
+### Create a database backup.
+###
+### Usage:
+###     $ docker compose exec -it postgres cli
+
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}"
